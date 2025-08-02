@@ -52,7 +52,7 @@ export interface EjecutivosData {
   providedIn: 'root'
 })
 export class VentasService {
-  private apiUrl = 'http://localhost:5025/api/ventas';
+  private apiUrl = 'https://dashboard-ventas-backend.onrender.com/api/ventas';
 
   constructor(private http: HttpClient) { }
 
