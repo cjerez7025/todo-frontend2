@@ -1,4 +1,3 @@
-// src/app/services/ventas.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -23,29 +22,39 @@ export interface CoordinadoresData {
   coordinadores: { [key: string]: number[] };
 }
 
-export interface ProductosData {
-  productos: Array<{
-    nombre: string;
-    ventas: number;
-    porcentaje: number;
-  }>;
+export interface ProductoData {
+  nombre: string;
+  ventas: number;
+  porcentaje: number;
 }
 
-export interface EjecutivosData {
-  ejecutivos: Array<{
-    posicion: number;
-    nombre: string;
-    coordinador: string;
-    enero: number;
-    febrero: number;
-    marzo: number;
-    abril: number;
-    mayo: number;
-    junio: number;
-    julio: number;
-    total: number;
-    promedio: number;
-  }>;
+export interface ProductosResponse {
+  productos: ProductoData[];
+}
+
+export interface ProductosPorMesResponse {
+  mes: string;
+  productos: ProductoData[];
+  mesesDisponibles: string[];
+}
+
+export interface EjecutivoData {
+  posicion: number;
+  nombre: string;
+  coordinador: string;
+  enero: number;
+  febrero: number;
+  marzo: number;
+  abril: number;
+  mayo: number;
+  junio: number;
+  julio: number;
+  total: number;
+  promedio: number;
+}
+
+export interface EjecutivosResponse {
+  ejecutivos: EjecutivoData[];
 }
 
 @Injectable({
@@ -68,16 +77,16 @@ export class VentasService {
     return this.http.get<CoordinadoresData>(`${this.apiUrl}/coordinadores`);
   }
 
-  getProductos(): Observable<ProductosData> {
-    return this.http.get<ProductosData>(`${this.apiUrl}/productos`);
+  getProductos(): Observable<ProductosResponse> {
+    return this.http.get<ProductosResponse>(`${this.apiUrl}/productos`);
   }
 
-  getTopEjecutivos(cantidad: number = 15): Observable<EjecutivosData> {
-    return this.http.get<EjecutivosData>(`${this.apiUrl}/ejecutivos/top/${cantidad}`);
+  getProductosPorMes(mes?: string): Observable<ProductosPorMesResponse> {
+    const url = mes ? `${this.apiUrl}/productos/${mes}` : `${this.apiUrl}/productos`;
+    return this.http.get<ProductosPorMesResponse>(url);
   }
 
-  // Método para obtener todos los datos de una vez
-  getDatosCompletos(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  getTopEjecutivos(cantidad: number = 15): Observable<EjecutivosResponse> {
+    return this.http.get<EjecutivosResponse>(`${this.apiUrl}/ejecutivos/top/${cantidad}`);
   }
 }
